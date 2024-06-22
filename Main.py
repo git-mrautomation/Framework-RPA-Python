@@ -11,7 +11,6 @@ driver = webdriver.Chrome()
 # Inicializando Parametros Globais
 df = pd.read_excel('Config.xlsx')
 parametros = {}
-
 for index, row in df.iterrows():
     parametro = row['Paramater']
     valor = row['Value']
@@ -39,7 +38,7 @@ def WaitElementByID(id, timeout):
         return elemento
 
     except Exception:
-        print(f"O elemento com XPath '{id}' não foi encontrado após {
+        print(f"O elemento com ID '{id}' não foi encontrado após {
               timeout} segundos.")
         return None
 
@@ -72,21 +71,29 @@ def findElementByContainsText(tag, text):
 def initAllApplications():
     # Iniciando navegador
     try:
-        print("Iniciando as aplicações.")
-        driver.get('url')
+        print("Inicializando as aplicações.")
+        # driver.close()
+        driver.get('https://rpachallenge.com/')
+        print("Finalizado inicialização das aplicações.")
     except Exception as e:
-        print(f"Falha ao iniciar as aplicações. Erro: {e}")
+        print(f"Falha ao inicializar as aplicações. Erro: {e}")
 
 
 # Main workflow
-initAllApplications
+initAllApplications()
 
-while True:
+transactionNumber = 1
+
+while transactionNumber <= parametros["max_retry"]:
     try:
-        print("Iniciou o processamento.")
-        sleep(5)
-        print("Finalizou o processamento.")
+        print("Inicializando o processamento.")
+
+        findElementByID("teste").click()
+        print("Finalizado o processamento.")
         break
     except Exception:
         print(Exception)
-        initAllApplications
+        if transactionNumber <= parametros:
+            initAllApplications()
+
+    transactionNumber += 1
